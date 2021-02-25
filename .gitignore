@@ -1,0 +1,5 @@
+build/
+jch_c/*.d
+jch_c/*.o
+jch_c/*.dylib
+
