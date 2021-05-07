@@ -1,6 +1,7 @@
 #include <stdint.h>
 #include <limits.h>
 #include "math.h"
+#include "pony.h"
 
 // A reasonably fast, good period, low memory use, xorshift64* based prng
 double lcg_next(uint64_t* x)
@@ -25,4 +26,15 @@ int32_t jch_chash(uint64_t key, uint32_t num_buckets)
   } while(j < num_buckets);
 
   return (int32_t)b;
+}
+
+void dummy_raise_error(void* arg)
+{
+  (void) arg;
+  pony_error();
+}
+
+bool dummy_try(void* data)
+{
+  return pony_try(&dummy_raise_error, data);
 }
