@@ -1,6 +1,8 @@
+PONYC ?= ponyc
 ponyrt_include ?=
 ponyc_trycatch ?=
 
+# PONYC := ~/dev/ponyc/build/debug/ponyc
 # ponyrt_include := ~/dev/ponyc/src/libponyrt
 # ponyc_trycatch := ~/dev/ponyc/build/build_release/except_try_catch.o
 
@@ -13,7 +15,7 @@ ifeq ($(ponyc_trycatch),)
 endif
 
 all: build_jch_c
-	ponyc -o build jch
+	$(PONYC) -o build jch
 
 # Build jch as a shared library
 # this only works on OSX, look how to do it for Windows/Linux
