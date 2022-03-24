@@ -1,30 +1,19 @@
 #include <stdlib.h>
 #include <assert.h>
 #include <stdint.h>
-#include <limits.h>
-#include "math.h"
 #include "pony.h"
 
-// A reasonably fast, good period, low memory use, xorshift64* based prng
-double lcg_next(uint64_t* x)
-{
-  *x ^= *x >> 12;
-  *x ^= *x << 25;
-  *x ^= *x >> 27;
-  return (double)(*x * 2685821657736338717LL) / ULONG_MAX;
-}
-
-// Jump consistent hash
+// A fast, minimal memory, consistent hash algorithm
+// https://arxiv.org/abs/1406.2294
 int32_t jch_chash(uint64_t key, uint32_t num_buckets)
 {
-  uint64_t seed = key;
   int b = -1;
-  uint32_t j = 0;
+  uint64_t j = 0;
 
   do {
     b = j;
-    double r = lcg_next(&seed);
-    j = floor((b + 1)/r);
+    key = key * 2862933555777941757ULL + 1;
+    j = (b + 1) * ((double)(1LL << 31) / ((double)(key >> 33) + 1));
   } while(j < num_buckets);
 
   return (int32_t)b;
